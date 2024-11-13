@@ -15,6 +15,7 @@ const Login = () => {
         .then((result) => {
             if(result.data.message == "Success")
             {
+                localStorage.setItem("token",result.data.token)
                 navigate("/")
             }
         })

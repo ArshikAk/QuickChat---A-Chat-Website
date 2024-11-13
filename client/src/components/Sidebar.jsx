@@ -1,7 +1,8 @@
+/* eslint-disable react/prop-types */
 import ContactCard from "./ContactCard"
 
 
-const Sidebar = () => {
+const Sidebar = ({contacts}) => {
   return (
 
     <div className="">
@@ -12,8 +13,8 @@ const Sidebar = () => {
 
         <div className="flex flex-col overflow-y-auto h-[calc(70vh-80px)] scroll-bar">
             {
-                Array(20).fill(0).map((item , index) => {
-                    return <ContactCard key={index}/>
+                contacts && contacts.map((item , index) => {
+                    return <ContactCard key={index} item={item}/>
                 })
             }
         </div>

@@ -20,3 +20,5 @@ mongoose.connect(process.env.MONGO_DB_URL)
 })
 
 app.use("/api/auth",require("./routes/authRoutes"))
+app.use("/api/contact",require("./routes/contactRoutes"))
+app.use("/api/profile",require("./routes/profileRoutes"))

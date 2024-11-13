@@ -52,7 +52,7 @@ exports.loginUser = async (req,res) => {
                 let payload = {
                     user : result
                 }
-                let token = jwt.sign(payload,process.env.JWT_SECRET)
+                let token = jwt.sign(payload,process.env.JWT_SECRET,{expiresIn : "2d"})
                 res.status(200).json({
                     token : token,
                     message : "Success"

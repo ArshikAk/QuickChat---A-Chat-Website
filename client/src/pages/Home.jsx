@@ -2,16 +2,46 @@ import MessageContainer from "../components/MessageContainer"
 import Sidebar from "../components/Sidebar"
 import Navbar from "../components/Navbar"
 import Profile from "../components/Profile"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import axios from "axios"
 
 
 const Home = () => {
 
     const [openProfile , setOpenProfile] = useState(false)
+    const [contacts , setContacts] = useState([])
+    const [profileData , setProfileData] = useState(null)
+
+    let token = localStorage.getItem("token")
+    let config = {
+        headers : {
+            "Authorization" : `Bearer ${token}`
+        }
+    }
 
     const toggleProfileSection = () => {
         setOpenProfile(!openProfile)
     }
+
+    useEffect(() => {
+        axios.get("http://localhost:8000/api/contact/getContacts")
+        .then((result) => {
+            setContacts(result.data)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    },[])
+
+    useEffect(() => {
+        axios.get("http://localhost:8000/api/profile/getProfileData",config)
+        .then((result) => {
+            setProfileData(result.data)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    },[])
 
   return (
 
@@ -24,11 +54,11 @@ const Home = () => {
             </div>
             
             <div className="w-[25%] border-r border-solid border-gray-500" style={openProfile ? {display : "none"} : {display : "block"}} >
-                <Sidebar/>
+                <Sidebar contacts={contacts} />
             </div>
 
             <div className="w-[25%] border-r border-solid border-gray-500" style={openProfile ? {display : "block"} : {display : "none"}} >
-                <Profile/>
+                <Profile data={profileData}/>
             </div>
 
             <div className="w-[70%]">
