@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import ContactCard from "./ContactCard"
 import { useAuth } from "../context/AuthContext"
 
@@ -7,7 +7,7 @@ import { useAuth } from "../context/AuthContext"
 const Sidebar = ({contacts , setSelectedConversation , selectedConversation }) => {
 
     const [search , setSearch] = useState("")
-    const {user} = useAuth()
+    const { user } = useAuth()
 
 
   return (

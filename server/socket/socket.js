@@ -24,10 +24,15 @@ io.on("connection",(socket) => {
     const userId = socket.handshake.query.userId
 
     if(userId != "undefined")
+    {
         userSocketIdMap[userId] = socket.id
+    }
+
+    socket.emit("onlineUsers",Object.keys(userSocketIdMap))
 
     socket.on("disconnect",() => {
         delete userSocketIdMap[userId]
+        socket.emit("onlineUsers",Object.keys(userSocketIdMap))
     })
 })
 

@@ -10,9 +10,9 @@ const MessageContainer = ({ selectedConversation }) => {
 
   const [messages , setMessages] = useState(null)
   const [message , setMessage] = useState("")
-  const {user} = useAuth()
+  const { user } = useAuth()
 
-  useListenMessage(messages,setMessages)
+  useListenMessage(setMessages)
 
   let token = localStorage.getItem("token")
   let config = {
@@ -40,12 +40,13 @@ const MessageContainer = ({ selectedConversation }) => {
         const receiverId = selectedConversation._id
         axios.post("http://localhost:8000/api/messages/sendMessage",{receiverId , message},config)
         .then((result) => {
+            console.log(result)
             if(result.data == "Message sent successfully")
             {
               
               setMessage("")
 
-              let temp = messages
+              let temp = messages || []
               temp.push({
                 senderId : user._id,
                 receiverId : receiverId,
@@ -59,10 +60,6 @@ const MessageContainer = ({ selectedConversation }) => {
         })
     }
   }
-
-  // useEffect(() => {
-  //   console.log(selectedConversation)
-  // },[selectedConversation])
 
   return (
 

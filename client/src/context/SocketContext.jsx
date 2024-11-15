@@ -8,6 +8,7 @@ const SocketContext = createContext()
 export const SocketProvider = ({children}) => {
 
     const [socket , setSocket] = useState(null)
+    const [onlineUsers , setOnlineUsers] = useState(null)
     const {user} = useAuth()
 
     useEffect(() => {
@@ -18,7 +19,12 @@ export const SocketProvider = ({children}) => {
                     userId : user._id
                 }
             })
+
             setSocket(newSocket)
+
+            newSocket.on("onlineUsers",(data) => {
+                setOnlineUsers(data)
+            })
         }
         // else
         // {
@@ -27,7 +33,7 @@ export const SocketProvider = ({children}) => {
     },[user])
 
     return (
-        <SocketContext.Provider value={{socket}}>
+        <SocketContext.Provider value={{socket , onlineUsers}}>
             {children}
         </SocketContext.Provider>
     )

@@ -3,16 +3,21 @@ const {getReceiverSocketId , io} = require("../socket/socket")
 
 exports.getMessages = async (req,res) => {
 
-    const receiverId = req.params.receiverId
-    const senderId = req.user._id
+    try{
+        const receiverId = req.params.receiverId
+        const senderId = req.user._id
 
-    conversationModel.findOne({participants : {$all : [senderId , receiverId]}})
-    .then((result) => {
-        res.status(200).json(result.messages)
-    })
-    .catch((err) => {
-        res.status(500).json({message : "Error fetching messages" , error : err})
-    })
+        conversationModel.findOne({participants : {$all : [senderId , receiverId]}})
+        .then((result) => {
+            result ? res.status(200).json(result.messages) : res.status(200).json(result)
+        })
+        .catch((err) => {
+            res.status(500).json({message : "Error fetching messages" , error : `Promise Error ${err}`})
+        })
+    }
+    catch (error) {
+        res.status(500).json({message : "Error fetching messages" , error : error})
+    }
 }
 
 exports.sendMessage = async (req,res) => {
@@ -48,7 +53,13 @@ exports.sendMessage = async (req,res) => {
             newConversation.save()
             res.status(200).json("Message sent successfully")
         }
-        io.to(receiverSocketId).emit("newMessage",message)
+
+        let data = {
+            senderId : senderId,
+            message : message,
+        }
+
+        io.to(receiverSocketId).emit("newMessage",data)
     }))
     .catch((err) => {
         res.status(500).json({message : "Error sending messages" , error : err})
