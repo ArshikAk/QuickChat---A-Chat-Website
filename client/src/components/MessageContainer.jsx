@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import MessageCard from "./MessageCard"
 import axios from "axios"
 import { useAuth } from "../context/AuthContext"
+import useListenMessage from "../hooks/useListenMessage"
 
 
 const MessageContainer = ({ selectedConversation }) => {
@@ -10,6 +11,8 @@ const MessageContainer = ({ selectedConversation }) => {
   const [messages , setMessages] = useState(null)
   const [message , setMessage] = useState("")
   const {user} = useAuth()
+
+  useListenMessage(messages,setMessages)
 
   let token = localStorage.getItem("token")
   let config = {

@@ -1,5 +1,5 @@
 const conversationModel = require("../models/conversationModel")
-
+const {getReceiverSocketId , io} = require("../socket/socket")
 
 exports.getMessages = async (req,res) => {
 
@@ -19,6 +19,8 @@ exports.sendMessage = async (req,res) => {
 
     const {receiverId , message} = req.body
     const senderId = req.user._id
+
+    const receiverSocketId = getReceiverSocketId(receiverId)
 
     conversationModel.findOne({participants : {$all : [senderId , receiverId]}})
     .then((result => {
@@ -46,6 +48,7 @@ exports.sendMessage = async (req,res) => {
             newConversation.save()
             res.status(200).json("Message sent successfully")
         }
+        io.to(receiverSocketId).emit("newMessage",message)
     }))
     .catch((err) => {
         res.status(500).json({message : "Error sending messages" , error : err})

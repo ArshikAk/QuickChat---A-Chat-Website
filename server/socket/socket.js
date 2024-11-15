@@ -13,13 +13,22 @@ const io = new Server(server , {
     }
 })
 
+const userSocketIdMap = {}
+
+const getReceiverSocketId = (receiverId) => {
+    return userSocketIdMap[receiverId]
+}
 
 io.on("connection",(socket) => {
-    console.log("a user connected");
+
+    const userId = socket.handshake.query.userId
+
+    if(userId != "undefined")
+        userSocketIdMap[userId] = socket.id
 
     socket.on("disconnect",() => {
-        console.log("a user disconnected");
+        delete userSocketIdMap[userId]
     })
 })
 
-module.exports = {app,server,io}
+module.exports = {app,server,io,getReceiverSocketId}
