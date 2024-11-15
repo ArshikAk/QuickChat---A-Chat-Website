@@ -7,8 +7,6 @@ exports.registerUser = async (req,res) => {
 
     const {name , email , profilePic , password} = req.body
 
-    console.log(name , email , profilePic , password)
-
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(password,salt)
 
@@ -55,7 +53,8 @@ exports.loginUser = async (req,res) => {
                 let token = jwt.sign(payload,process.env.JWT_SECRET,{expiresIn : "2d"})
                 res.status(200).json({
                     token : token,
-                    message : "Success"
+                    message : "Success",
+                    user : result
                 })
             }
             else

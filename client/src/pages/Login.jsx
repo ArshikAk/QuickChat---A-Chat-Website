@@ -1,21 +1,24 @@
 import axios from "axios"
 import { useState } from "react"
 import { useNavigate , Link } from "react-router-dom"
+import { useAuth } from "../context/AuthContext"
 
 const Login = () => {
 
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
+    const {login} = useAuth()
 
     const navigate = useNavigate()
 
     const handleSubmit = () => {
         
         axios.post("http://localhost:8000/api/auth/login",{email,password})
-        .then((result) => {
+        .then( async (result) => {
             if(result.data.message == "Success")
             {
-                localStorage.setItem("token",result.data.token)
+                await login(result.data.user)
+                await localStorage.setItem("token",result.data.token)
                 navigate("/")
             }
         })

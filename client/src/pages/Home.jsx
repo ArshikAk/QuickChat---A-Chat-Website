@@ -11,6 +11,7 @@ const Home = () => {
     const [openProfile , setOpenProfile] = useState(false)
     const [contacts , setContacts] = useState([])
     const [profileData , setProfileData] = useState(null)
+    const [selectedConversation , setSelectedConversation] = useState(null)
 
     let token = localStorage.getItem("token")
     let config = {
@@ -54,7 +55,7 @@ const Home = () => {
             </div>
             
             <div className="w-[25%] border-r border-solid border-gray-500" style={openProfile ? {display : "none"} : {display : "block"}} >
-                <Sidebar contacts={contacts} />
+                <Sidebar contacts={contacts} selectedConversation={selectedConversation} setSelectedConversation={setSelectedConversation}/>
             </div>
 
             <div className="w-[25%] border-r border-solid border-gray-500" style={openProfile ? {display : "block"} : {display : "none"}} >
@@ -62,7 +63,7 @@ const Home = () => {
             </div>
 
             <div className="w-[70%]">
-                <MessageContainer/>
+                <MessageContainer selectedConversation={selectedConversation}/>
             </div>
 
         </div>
